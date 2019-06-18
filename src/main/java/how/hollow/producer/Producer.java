@@ -29,6 +29,8 @@ import com.netflix.hollow.api.producer.fs.HollowFilesystemPublisher;
 import how.hollow.producer.datamodel.Movie;
 import how.hollow.producer.datamodel.SourceDataRetriever;
 import java.io.File;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 
 public class Producer {
@@ -38,15 +40,17 @@ public class Producer {
 
     public static void main(String args[]) {
         File publishDir = new File(SCRATCH_DIR, "publish-dir");
+        Path publishPath = Paths.get(publishDir.getPath());
         publishDir.mkdir();
+
         
         System.out.println("I AM THE PRODUCER.  I WILL PUBLISH TO " + publishDir.getAbsolutePath());
         
-        Publisher publisher = new HollowFilesystemPublisher(publishDir);
-        Announcer announcer = new HollowFilesystemAnnouncer(publishDir);
+        Publisher publisher = new HollowFilesystemPublisher(publishPath);
+        Announcer announcer = new HollowFilesystemAnnouncer(publishPath);
         
-        BlobRetriever blobRetriever = new HollowFilesystemBlobRetriever(publishDir);
-        AnnouncementWatcher announcementWatcher = new HollowFilesystemAnnouncementWatcher(publishDir);
+        BlobRetriever blobRetriever = new HollowFilesystemBlobRetriever(publishPath);
+        AnnouncementWatcher announcementWatcher = new HollowFilesystemAnnouncementWatcher(publishPath);
         
         HollowProducer producer = HollowProducer.withPublisher(publisher)
                                                 .withAnnouncer(announcer)

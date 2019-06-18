@@ -29,16 +29,19 @@ import how.hollow.consumer.api.generated.MovieAPIHashIndex;
 import how.hollow.consumer.api.generated.MoviePrimaryKeyIndex;
 import how.hollow.producer.Producer;
 import java.io.File;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 public class Consumer {
     
     public static void main(String args[]) throws Exception {
         File publishDir = new File(Producer.SCRATCH_DIR, "publish-dir");
+        Path publishPath = Paths.get(publishDir.getPath());
         
         System.out.println("I AM THE CONSUMER.  I WILL READ FROM " + publishDir.getAbsolutePath());
 
-        HollowConsumer.BlobRetriever blobRetriever = new HollowFilesystemBlobRetriever(publishDir);
-        HollowConsumer.AnnouncementWatcher announcementWatcher = new HollowFilesystemAnnouncementWatcher(publishDir);
+        HollowConsumer.BlobRetriever blobRetriever = new HollowFilesystemBlobRetriever(publishPath);
+        HollowConsumer.AnnouncementWatcher announcementWatcher = new HollowFilesystemAnnouncementWatcher(publishPath);
         
         HollowConsumer consumer = HollowConsumer.withBlobRetriever(blobRetriever)
                                                 .withAnnouncementWatcher(announcementWatcher)
